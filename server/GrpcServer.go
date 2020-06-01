@@ -17,7 +17,12 @@ type server struct {
 }
 
 func (s *server) Login(ctx context.Context, request *proto.LoginRequest) (*proto.LoginResponse, error) {
-	return nil, nil
+	log.Println("Login rpc request :", request.String)
+	res, err := s.userService.Login(request)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 func (s *server) Register(ctx context.Context, request *proto.RegisterRequest) (*proto.RegisterResponse, error) {

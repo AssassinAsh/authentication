@@ -16,13 +16,21 @@ func main() {
 	}
 	client := proto.NewAuthenticationServiceClient(conn)
 
-	req := proto.RegisterRequest{
-		Username: "Rokade",
-		Password: "abc124",
-		Phone:    "9644695542",
+	// req := proto.RegisterRequest{
+	// 	Username: "Rokade",
+	// 	Password: "abc124",
+	// 	Phone:    "9644695542",
+	// }
+
+	// res, err := client.Register(context.Background(), &req)
+
+	req := proto.LoginRequest{
+		Username: "aq",
+		Password: "abc12",
 	}
 
-	res, err := client.Register(context.Background(), &req)
+	res, err := client.Login(context.Background(), &req)
+
 	if err != nil {
 		fmt.Println("Error :", err)
 	} else {

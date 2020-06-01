@@ -63,7 +63,7 @@ func getMysqlDB() *gorm.DB {
 
 	db, err := gorm.Open("mysql", cfg.DBConfig.Username+":"+
 		cfg.DBConfig.Password+"@tcp("+cfg.DBConfig.Address+":"+cfg.DBConfig.Port+")/"+
-		cfg.DBConfig.DatabaseName)
+		cfg.DBConfig.DatabaseName+"?parseTime=true")
 
 	if err != nil {
 		panic(err)
