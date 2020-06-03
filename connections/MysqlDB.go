@@ -1,6 +1,7 @@
-package clients
+package connections
 
 import (
+	"authentication/config"
 	"log"
 	"sync"
 
@@ -9,27 +10,18 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+//DBInstanceInterface -
 type DBInstanceInterface interface {
 	GetDatabaseInstance() *gorm.DB
 }
 
+//DBInstance -
 type DBInstance struct {
 	DBInstanceInterface
 }
 
 type connectionDB struct {
 	dataBase *gorm.DB
-}
-
-//YAMLConfig - To parse application.yaml
-type YAMLConfig struct {
-	DBConfig struct {
-		Username     string `yaml:"user"`
-		Password     string `yaml:"password"`
-		Port         string `yaml:"port"`
-		DatabaseName string `yaml:"database_name"`
-		Address      string `yaml:"address"`
-	} `yaml:"database"`
 }
 
 var db *connectionDB
@@ -53,7 +45,7 @@ func InitializeDB() {
 func getMysqlDB() *gorm.DB {
 	log.Print("Initializing DB Connection")
 
-	var cfg YAMLConfig
+	var cfg config.YAMLConfig
 
 	err := cleanenv.ReadConfig("application.yaml", &cfg)
 
@@ -74,6 +66,7 @@ func getMysqlDB() *gorm.DB {
 	return db
 }
 
+//GetDatabaseInstance -
 func (db *DBInstance) GetDatabaseInstance() *gorm.DB {
 	return getDBConfig().dataBase
 }
