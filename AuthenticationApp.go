@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	_ "github.com/jnewmano/grpc-json-proxy/gogoprotobuf/codec"
 )
 
 func main() {

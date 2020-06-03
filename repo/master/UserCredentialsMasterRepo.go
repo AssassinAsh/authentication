@@ -1,7 +1,7 @@
 package master
 
 import (
-	"authentication/client"
+	"authentication/clients"
 	"authentication/models"
 
 	"github.com/jinzhu/gorm"
@@ -20,7 +20,7 @@ type UserCredentialsMasterRepo struct {
 
 //NewUserCredentialsMasterRepo - returns new repo
 func NewUserCredentialsMasterRepo() UserCredentialsMasterRepoService {
-	var db *client.DBInstance
+	var db *clients.DBInstance
 	return &UserCredentialsMasterRepo{
 		database: db.GetDatabaseInstance(),
 	}

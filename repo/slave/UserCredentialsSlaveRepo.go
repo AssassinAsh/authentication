@@ -1,7 +1,7 @@
 package slave
 
 import (
-	"authentication/client"
+	"authentication/clients"
 	"authentication/models"
 
 	"github.com/jinzhu/gorm"
@@ -20,7 +20,7 @@ type UserCredentialsSlaveRepo struct {
 
 //NewUserCredentialsSlaveRepo -
 func NewUserCredentialsSlaveRepo() UserCredentialsSlaveRepoService {
-	var db *client.DBInstance
+	var db *clients.DBInstance
 	return &UserCredentialsSlaveRepo{
 		database: db.GetDatabaseInstance(),
 	}

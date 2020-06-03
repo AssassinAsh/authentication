@@ -8,6 +8,7 @@ import (
 	"log"
 
 	"authentication/mappers"
+	"authentication/utils"
 )
 
 //UserServiceInterface -
@@ -45,7 +46,7 @@ func (user *UserService) Login(request *proto.LoginRequest) (*proto.LoginRespons
 		}, err
 	}
 
-	if userModel.Password == request.Password {
+	if utils.ComparePasswords(userModel.Password, request.Password+request.Username) {
 		return &proto.LoginResponse{
 			LoginResponseMap: map[string]string{
 				"Response":      "Login Successful",
@@ -66,14 +67,42 @@ func (user *UserService) Login(request *proto.LoginRequest) (*proto.LoginRespons
 func (user *UserService) Register(request *proto.RegisterRequest) (*proto.RegisterResponse, error) {
 	log.Println("User Register Service")
 	masterRepo := user.userCredentialsMasterRepoService
-	err := masterRepo.SaveToUserCredentials(mappers.RegisterRequestProtoToUserModel(request))
-	if err != nil {
-		fmt.Println(err)
+
+	if user.checkUsernameExistence(request.Username) {
+
+		request.Password = utils.HashAndSaltPassword(request.Password + request.Username)
+
+		err := masterRepo.SaveToUserCredentials(mappers.RegisterRequestProtoToUserModel(request))
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		res := proto.RegisterResponse{RegisterResponseMap: map[string]string{
+			"Response":      "Account Created Successfully",
+			"Response Code": "200",
+		}}
+
+		return &res, err
 	}
 
 	res := proto.RegisterResponse{RegisterResponseMap: map[string]string{
+		"Response":      "Account Already Exists",
 		"Response Code": "200",
 	}}
 
-	return &res, err
+	return &res, nil
+
+}
+
+func (user *UserService) checkUsernameExistence(username string) bool {
+	slaveRepo := user.userCredentialsSlaveRepoService
+
+	_, err := slaveRepo.ReadUserCredentialsByUsername(username)
+
+	if err != nil {
+		log.Println(err)
+		return true
+	}
+
+	return false
 }

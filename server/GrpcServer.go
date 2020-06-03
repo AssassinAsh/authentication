@@ -1,7 +1,7 @@
 package server
 
 import (
-	"authentication/client"
+	"authentication/clients"
 	"authentication/proto"
 	"authentication/services"
 	"context"
@@ -17,7 +17,6 @@ type server struct {
 }
 
 func (s *server) Login(ctx context.Context, request *proto.LoginRequest) (*proto.LoginResponse, error) {
-	log.Println("Login rpc request :", request.String)
 	res, err := s.userService.Login(request)
 	if err != nil {
 		return nil, err
@@ -26,7 +25,6 @@ func (s *server) Login(ctx context.Context, request *proto.LoginRequest) (*proto
 }
 
 func (s *server) Register(ctx context.Context, request *proto.RegisterRequest) (*proto.RegisterResponse, error) {
-	log.Println("Register rpc request :", request.String)
 	res, err := s.userService.Register(request)
 	if err != nil {
 		return nil, err
@@ -43,7 +41,7 @@ func StartServer() {
 	}
 
 	srv := grpc.NewServer()
-	client.InitializeDB()
+	clients.InitializeDB()
 
 	proto.RegisterAuthenticationServiceServer(srv, &server{
 		userService: services.NewUserService(),

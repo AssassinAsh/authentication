@@ -18,15 +18,15 @@ func main() {
 
 	// req := proto.RegisterRequest{
 	// 	Username: "Rokade",
-	// 	Password: "abc124",
+	// 	Password: "awesome",
 	// 	Phone:    "9644695542",
 	// }
 
 	// res, err := client.Register(context.Background(), &req)
 
 	req := proto.LoginRequest{
-		Username: "aq",
-		Password: "abc12",
+		Username: "Rokade",
+		Password: "abc124",
 	}
 
 	res, err := client.Login(context.Background(), &req)
