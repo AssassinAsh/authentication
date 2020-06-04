@@ -45,7 +45,7 @@ func InitializeDB() {
 func getMysqlDB() *gorm.DB {
 	log.Print("Initializing DB Connection")
 
-	var cfg config.YAMLConfig
+	var cfg config.DBConfig
 
 	err := cleanenv.ReadConfig("application.yaml", &cfg)
 

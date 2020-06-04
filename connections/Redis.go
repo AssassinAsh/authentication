@@ -16,7 +16,7 @@ var Client *redis.Client
 func Redis() {
 	fmt.Println("Initializing Redis...")
 
-	var cfg config.YAMLConfig
+	var cfg config.RedisConfig
 
 	err := cleanenv.ReadConfig("application.yaml", &cfg)
 
