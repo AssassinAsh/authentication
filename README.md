@@ -18,6 +18,10 @@ Golang - Basic Login/Register services implemented using
   - database_name: authentication
   - address: db address
 
+Set the go path by running
+
+> export PATH=$PATH:$(dirname $(go list -f '{{.Target}}' .))
+
 After installing all the dependencies
 
 > go run AuthenticationApp.go
