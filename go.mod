@@ -3,7 +3,7 @@ module authentication
 go 1.14
 
 require (
-	github.com/Shopify/sarama v1.26.4 // indirect
+	github.com/Shopify/sarama v1.26.4
 	github.com/go-redis/redis/v7 v7.3.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang/protobuf v1.4.2

@@ -1,41 +1,30 @@
 package main
 
 import (
-	"authentication/proto"
-	"context"
+	"authentication/kafka/producers"
+	"authentication/utils"
 	"fmt"
-	"log"
-
-	"google.golang.org/grpc"
 )
 
+type otp struct {
+	Otp string
+}
+
 func main() {
-	conn, err := grpc.Dial("localhost:6565", grpc.WithInsecure())
-	if err != nil {
-		log.Panic(err)
-	}
-	client := proto.NewAuthenticationServiceClient(conn)
-
-	// req := proto.RegisterRequest{
-	// 	Username: "Rokade",
-	// 	Password: "awesome",
-	// 	Phone:    "9644695542",
+	// // conn, err := grpc.Dial("localhost:6565", grpc.WithInsecure())
+	// if err != nil {
+	// 	log.Panic(err)
 	// }
+	// client := proto.NewAuthenticationServiceClient(conn)
 
-	// res, err := client.Register(context.Background(), &req)
-
-	req := proto.LoginRequest{
-		Username: "Rokade",
-		Password: "abc124",
+	test := otp{
+		Otp: *utils.OtpGenerator(),
 	}
 
-	res, err := client.Login(context.Background(), &req)
+	fmt.Println("test :", test.Otp)
 
-	if err != nil {
-		fmt.Println("Error :", err)
-	} else {
-		fmt.Println(res)
-	}
+	producers.OtpProducer(&test)
 
-	conn.Close()
+	// conn.Close()
+
 }
