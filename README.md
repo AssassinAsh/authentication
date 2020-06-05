@@ -5,18 +5,19 @@ Golang - Basic Login/Register services implemented using
 - gRPC
 - Database (MySQL)
 
-### Do Insert an application.yaml file with following properties
+### Do Insert an application.yaml file with the structure shown in properties dir
 
-- server:
-  - host: hostname
-  - port: portName
+### Make MySQL DB named `authentication` and run 
 
-- database:
-  - port: db port
-  - user: db username
-  - password: db user's password
-  - database_name: authentication
-  - address: db address
+> CREATE TABLE `authentication.user_credentials`
+>          ( `id` INT unsigned NOT NULL AUTO_INCREMENT,
+>            `username` VARCHAR(30) NOT NULL,
+>            `password` VARCHAR(100) NOT NULL,
+>            `phone` VARCHAR(13) NOT NULL,
+>            `created_at` timestamp NOT NULL DEFAULT current_timestamp,
+>            `updated_at` timestamp NOT NULL DEFAULT current_timestamp,
+>            `deleted_at` varchar(45) NULL default '0000-00-00 00:00:00',
+>             PRIMARY KEY (username, id)); 
 
 Set the go path by running
 
