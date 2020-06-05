@@ -1,12 +1,45 @@
 package master
 
-import "github.com/jinzhu/gorm"
+import (
+	"authentication/connections"
+	"authentication/models"
 
-//User - struct
-type User struct {
-	gorm.Model
-	ID       uint64 `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Phone    string `json:"phone"`
+	"github.com/jinzhu/gorm"
+)
+
+//UserCredentialsMasterRepoService - To perform write operations
+type UserCredentialsMasterRepoService interface {
+	SaveToUserCredentials(user *models.User) error
+	UpdateToUserCredentials(user *models.User) error
+}
+
+//UserCredentialsMasterRepo - Repository
+type UserCredentialsMasterRepo struct {
+	database *gorm.DB
+}
+
+//NewUserCredentialsMasterRepo - returns new repo
+func NewUserCredentialsMasterRepo() UserCredentialsMasterRepoService {
+	var db *connections.DBInstance
+	return &UserCredentialsMasterRepo{
+		database: db.GetDatabaseInstance(),
+	}
+}
+
+//SaveToUserCredentials - Saves new Entry
+func (userRepo UserCredentialsMasterRepo) SaveToUserCredentials(data *models.User) error {
+	err := userRepo.database.Debug().Create(&data).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//UpdateToUserCredentials - Updates an existing entry
+func (userRepo UserCredentialsMasterRepo) UpdateToUserCredentials(data *models.User) error {
+	err := userRepo.database.Debug().Where("id = ?", data.ID).Update(&data).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }

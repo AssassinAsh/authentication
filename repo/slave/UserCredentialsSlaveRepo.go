@@ -1,12 +1,51 @@
 package slave
 
-import "github.com/jinzhu/gorm"
+import (
+	"authentication/connections"
+	"authentication/models"
 
-//User - struct
-type User struct {
-	gorm.Model
-	ID       uint64 `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Phone    string `json:"phone"`
+	"github.com/jinzhu/gorm"
+)
+
+//UserCredentialsSlaveRepoService - To perform read operations
+type UserCredentialsSlaveRepoService interface {
+	ReadUserCredentialsByUsername(username string) (*models.User, error)
+	ReadUserCredentialsByPhone(phone string) (*models.User, error)
+}
+
+//UserCredentialsSlaveRepo -
+type UserCredentialsSlaveRepo struct {
+	database *gorm.DB
+}
+
+//NewUserCredentialsSlaveRepo -
+func NewUserCredentialsSlaveRepo() UserCredentialsSlaveRepoService {
+	var db *connections.DBInstance
+	return &UserCredentialsSlaveRepo{
+		database: db.GetDatabaseInstance(),
+	}
+}
+
+//ReadUserCredentialsByUsername -
+func (userRepo *UserCredentialsSlaveRepo) ReadUserCredentialsByUsername(username string) (*models.User, error) {
+	var userCredentials models.User
+	err := userRepo.database.Debug().Find(&userCredentials, "username = ?", username).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &userCredentials, nil
+}
+
+//ReadUserCredentialsByPhone -
+func (userRepo *UserCredentialsSlaveRepo) ReadUserCredentialsByPhone(phone string) (*models.User, error) {
+	var userCredentials models.User
+	err := userRepo.database.Debug().Find(&userCredentials, "phone = ?", phone).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &userCredentials, nil
 }
