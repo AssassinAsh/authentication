@@ -33,6 +33,14 @@ func (s *server) Register(ctx context.Context, request *proto.RegisterRequest) (
 	return res, nil
 }
 
+func (s *server) VerifyOtp(ctx context.Context, request *proto.OtpRequest) (*proto.OtpResponse, error) {
+	res, err := s.userService.VerifyOtp(request)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 //StartServer - function to start the authentication grpc server
 func StartServer() {
 

@@ -15,6 +15,7 @@ import (
 type UserServiceInterface interface {
 	Login(request *proto.LoginRequest) (*proto.LoginResponse, error)
 	Register(request *proto.RegisterRequest) (*proto.RegisterResponse, error)
+	VerifyOtp(request *proto.OtpRequest) (*proto.OtpResponse, error)
 }
 
 //UserService -
@@ -76,6 +77,8 @@ func (user *UserService) Register(request *proto.RegisterRequest) (*proto.Regist
 
 		err := components.CacheUser(userModel)
 
+		components.OtpSender(request.Username)
+
 		// err := masterRepo.SaveToUserCredentials(userModel)
 		// if err != nil {
 		// 	fmt.Println(err)
@@ -96,4 +99,9 @@ func (user *UserService) Register(request *proto.RegisterRequest) (*proto.Regist
 
 	return &res, nil
 
+}
+
+//VerifyOtp - to verify the otp
+func (user *UserService) VerifyOtp(request *proto.OtpRequest) (*proto.OtpResponse, error) {
+	return nil, nil
 }

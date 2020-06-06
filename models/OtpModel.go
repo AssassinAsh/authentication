@@ -2,6 +2,6 @@ package models
 
 //OtpModel -
 type OtpModel struct {
-	User User
-	Otp string
+	UserModel User   `json:"user"`
+	Otp       string `json:"otp"`
 }

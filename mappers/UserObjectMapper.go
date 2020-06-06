@@ -17,7 +17,7 @@ func RegisterRequestProtoToUserModel(request *proto.RegisterRequest) *models.Use
 //UserToOtpModel -
 func UserToOtpModel(user *models.User) *models.OtpModel {
 	return &models.OtpModel{
-		User: *user,
-		Otp:  "",
+		UserModel: *user,
+		Otp:       "",
 	}
 }

@@ -34,7 +34,7 @@ var file_auth_services_proto_rawDesc = []byte{
 	0x0a, 0x13, 0x61, 0x75, 0x74, 0x68, 0x2d, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e,
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x05, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x13, 0x61, 0x75,
 	0x74, 0x68, 0x2d, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x32, 0x88, 0x01, 0x0a, 0x15, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61,
+	0x6f, 0x32, 0xbc, 0x01, 0x0a, 0x15, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61,
 	0x74, 0x69, 0x6f, 0x6e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x32, 0x0a, 0x05, 0x4c,
 	0x6f, 0x67, 0x69, 0x6e, 0x12, 0x13, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x4c, 0x6f, 0x67,
 	0x69, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x14, 0x2e, 0x70, 0x72, 0x6f, 0x74,
@@ -42,23 +42,30 @@ var file_auth_services_proto_rawDesc = []byte{
 	0x3b, 0x0a, 0x08, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x12, 0x16, 0x2e, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75,
 	0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x52, 0x65, 0x67, 0x69,
-	0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x32, 0x0a, 0x09,
+	0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x4f, 0x74, 0x70, 0x12, 0x11, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x2e, 0x4f, 0x74, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x12, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x4f, 0x74, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var file_auth_services_proto_goTypes = []interface{}{
 	(*LoginRequest)(nil),     // 0: proto.LoginRequest
 	(*RegisterRequest)(nil),  // 1: proto.RegisterRequest
-	(*LoginResponse)(nil),    // 2: proto.LoginResponse
-	(*RegisterResponse)(nil), // 3: proto.RegisterResponse
+	(*OtpRequest)(nil),       // 2: proto.OtpRequest
+	(*LoginResponse)(nil),    // 3: proto.LoginResponse
+	(*RegisterResponse)(nil), // 4: proto.RegisterResponse
+	(*OtpResponse)(nil),      // 5: proto.OtpResponse
 }
 var file_auth_services_proto_depIdxs = []int32{
 	0, // 0: proto.AuthenticationService.Login:input_type -> proto.LoginRequest
 	1, // 1: proto.AuthenticationService.Register:input_type -> proto.RegisterRequest
-	2, // 2: proto.AuthenticationService.Login:output_type -> proto.LoginResponse
-	3, // 3: proto.AuthenticationService.Register:output_type -> proto.RegisterResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	2, // 2: proto.AuthenticationService.VerifyOtp:input_type -> proto.OtpRequest
+	3, // 3: proto.AuthenticationService.Login:output_type -> proto.LoginResponse
+	4, // 4: proto.AuthenticationService.Register:output_type -> proto.RegisterResponse
+	5, // 5: proto.AuthenticationService.VerifyOtp:output_type -> proto.OtpResponse
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -103,6 +110,7 @@ const _ = grpc.SupportPackageIsVersion6
 type AuthenticationServiceClient interface {
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
+	VerifyOtp(ctx context.Context, in *OtpRequest, opts ...grpc.CallOption) (*OtpResponse, error)
 }
 
 type authenticationServiceClient struct {
@@ -131,10 +139,20 @@ func (c *authenticationServiceClient) Register(ctx context.Context, in *Register
 	return out, nil
 }
 
+func (c *authenticationServiceClient) VerifyOtp(ctx context.Context, in *OtpRequest, opts ...grpc.CallOption) (*OtpResponse, error) {
+	out := new(OtpResponse)
+	err := c.cc.Invoke(ctx, "/proto.AuthenticationService/VerifyOtp", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthenticationServiceServer is the server API for AuthenticationService service.
 type AuthenticationServiceServer interface {
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
+	VerifyOtp(context.Context, *OtpRequest) (*OtpResponse, error)
 }
 
 // UnimplementedAuthenticationServiceServer can be embedded to have forward compatible implementations.
@@ -146,6 +164,9 @@ func (*UnimplementedAuthenticationServiceServer) Login(context.Context, *LoginRe
 }
 func (*UnimplementedAuthenticationServiceServer) Register(context.Context, *RegisterRequest) (*RegisterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
+}
+func (*UnimplementedAuthenticationServiceServer) VerifyOtp(context.Context, *OtpRequest) (*OtpResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyOtp not implemented")
 }
 
 func RegisterAuthenticationServiceServer(s *grpc.Server, srv AuthenticationServiceServer) {
@@ -188,6 +209,24 @@ func _AuthenticationService_Register_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthenticationService_VerifyOtp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OtpRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthenticationServiceServer).VerifyOtp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.AuthenticationService/VerifyOtp",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthenticationServiceServer).VerifyOtp(ctx, req.(*OtpRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _AuthenticationService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "proto.AuthenticationService",
 	HandlerType: (*AuthenticationServiceServer)(nil),
@@ -199,6 +238,10 @@ var _AuthenticationService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Register",
 			Handler:    _AuthenticationService_Register_Handler,
+		},
+		{
+			MethodName: "VerifyOtp",
+			Handler:    _AuthenticationService_VerifyOtp_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

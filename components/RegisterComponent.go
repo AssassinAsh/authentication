@@ -2,12 +2,14 @@ package components
 
 import (
 	"authentication/constants"
+	"authentication/kafka/producers"
 	"authentication/mappers"
 	"authentication/models"
 	"authentication/redis"
 	"authentication/repo/slave"
 	"authentication/utils"
 	"encoding/json"
+	"fmt"
 	"log"
 	"time"
 )
@@ -27,22 +29,24 @@ func CheckUsernameExistence(username string) bool {
 }
 
 //OtpSender -
-func OtpSender() error {
+func OtpSender(username string) {
 
-	return nil
+	otp := models.OtpKafka{
+		Message:  constants.OtpMessage,
+		Username: username,
+		Otp:      *utils.OtpGenerator(),
+	}
+
+	producers.OtpProducer(&otp)
 }
 
 //CacheUser -
 func CacheUser(user *models.User) error {
 	expTime := getRedisExpTime(&constants.RedisExpTime)
 
-	otpModel, err := json.Marshal(mappers.UserToOtpModel(user))
+	otpModel := mappers.UserToOtpModel(user)
 
-	if err != nil {
-		panic(err)
-	}
-
-	err = redis.SaveToRedis(user.Username, otpModel, expTime.Sub(time.Now()))
+	err := redis.SaveToRedis(user.Username, &otpModel, expTime.Sub(time.Now()))
 
 	return err
 }
@@ -51,4 +55,24 @@ func getRedisExpTime(time *time.Duration) time.Time {
 	expTime := utils.GetTimeAfterDuration(time)
 
 	return utils.ConvertToUTC(expTime)
+}
+
+//UpdateOtp - for updating the consumed otp into redis
+func UpdateOtp(otp *models.OtpKafka) error {
+
+	otpModel := models.OtpModel{}
+
+	entry, err := redis.GetRedisEntry(otp.Username)
+
+	if err != nil {
+		panic(err)
+	}
+
+	json.Unmarshal(entry, &otpModel)
+
+	fmt.Println(otp.Otp)
+
+	otpModel.Otp = otp.Otp
+
+	return redis.UpdateRedisEntry(otp.Username, &otpModel)
 }
