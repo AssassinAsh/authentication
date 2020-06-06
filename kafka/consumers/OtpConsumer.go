@@ -16,6 +16,8 @@ import (
 //OtpConsumer -
 func OtpConsumer() {
 
+	fmt.Println("Otp Consumer Running...")
+
 	var cfg config.KafkaConfig
 
 	err := cleanenv.ReadConfig("application.yaml", &cfg)

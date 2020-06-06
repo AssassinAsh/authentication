@@ -22,7 +22,7 @@ func SaveToRedis(key string, value interface{}, eTime time.Duration) error {
 		panic(err)
 	}
 
-	fmt.Println("Saved to Redis")
+	fmt.Println("Redis Entry Saved :", string(valueMarshalled))
 
 	return nil
 }
@@ -30,33 +30,25 @@ func SaveToRedis(key string, value interface{}, eTime time.Duration) error {
 //UpdateRedisEntry - for updating entry in redis
 func UpdateRedisEntry(key string, value interface{}) error {
 
-	entry, err := connections.RedisClient.Get(key).Bytes()
-
-	if err != nil {
-		return err
-	}
-
 	ttl, err := connections.RedisClient.TTL(key).Result()
 
 	if err != nil {
 		return err
 	}
 
-	json.Unmarshal(entry, &value)
-
-	SaveToRedis(key, value, ttl)
+	SaveToRedis(key, &value, ttl)
 
 	return nil
 }
 
 //DeleteRedisEntry - deletes the redis entry at given key
 func DeleteRedisEntry(key string) error {
-	err := connections.RedisClient.Del(key)
+	err := connections.RedisClient.Del(key).Err()
 
 	if err != nil {
 		panic(err)
 	}
-	return err.Err()
+	return err
 }
 
 //GetRedisEntry - to get entry saved in redis

@@ -63,3 +63,14 @@ func TestRegister(t *testing.T) {
 
 	t.Log(res)
 }
+
+func TestVerifyOtp(t *testing.T) {
+	req := proto.OtpRequest{
+		Username: "test",
+		Otp:      "0371",
+	}
+
+	res, _ := client.VerifyOtp(context.Background(), &req)
+
+	t.Log(res)
+}

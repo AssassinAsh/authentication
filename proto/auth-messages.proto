@@ -23,8 +23,9 @@ message RegisterResponse {
 
 message OtpRequest {
     string otp = 1;
+    string username = 2;
 }
 
 message OtpResponse {
-    map<string, string> registerResponseMap = 1;
+    map<string, string> otpResponseMap = 1;
 }

@@ -5,6 +5,7 @@ import (
 	"authentication/proto"
 	"authentication/services"
 	"context"
+	"fmt"
 	"log"
 	"net"
 
@@ -43,6 +44,8 @@ func (s *server) VerifyOtp(ctx context.Context, request *proto.OtpRequest) (*pro
 
 //StartServer - function to start the authentication grpc server
 func StartServer() {
+
+	fmt.Println("Starting gRPC Server")
 
 	var cfg config.ServerConfig
 

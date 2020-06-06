@@ -11,7 +11,7 @@ import (
 
 //OtpProducer - Kafka Otp Producer
 func OtpProducer(event interface{}) {
-	log.Println("Otp Producer")
+	log.Println("Otp Producer Running...")
 	var cfg config.KafkaConfig
 
 	err := cleanenv.ReadConfig("application.yaml", &cfg)

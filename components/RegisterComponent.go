@@ -9,7 +9,6 @@ import (
 	"authentication/repo/slave"
 	"authentication/utils"
 	"encoding/json"
-	"fmt"
 	"log"
 	"time"
 )
@@ -69,8 +68,6 @@ func UpdateOtp(otp *models.OtpKafka) error {
 	}
 
 	json.Unmarshal(entry, &otpModel)
-
-	fmt.Println(otp.Otp)
 
 	otpModel.Otp = otp.Otp
 

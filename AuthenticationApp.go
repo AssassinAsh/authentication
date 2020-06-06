@@ -25,8 +25,8 @@ func main() {
 
 	log.Println("Running...")
 	http.HandleFunc("/status", controller.HealthCheckController)
+	go consumers.OtpConsumer()
 	server.StartServer()
-	consumers.OtpConsumer()
 	fmt.Println(http.ListenAndServe(":"+cfg.Server.Port, nil))
 	fmt.Println("Started Authentication Server on Port :", cfg.Server.Port)
 }

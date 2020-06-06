@@ -2,10 +2,15 @@ package services
 
 import (
 	"authentication/components"
+	"authentication/models"
 	"authentication/proto"
+	"authentication/redis"
 	"authentication/repo/master"
 	"authentication/repo/slave"
+	"encoding/json"
+	"fmt"
 	"log"
+	"strings"
 
 	"authentication/mappers"
 	"authentication/utils"
@@ -67,7 +72,6 @@ func (user *UserService) Login(request *proto.LoginRequest) (*proto.LoginRespons
 //Register -
 func (user *UserService) Register(request *proto.RegisterRequest) (*proto.RegisterResponse, error) {
 	log.Println("User Register Service")
-	// masterRepo := user.userCredentialsMasterRepoService
 
 	if components.CheckUsernameExistence(request.Username) {
 
@@ -78,11 +82,6 @@ func (user *UserService) Register(request *proto.RegisterRequest) (*proto.Regist
 		err := components.CacheUser(userModel)
 
 		components.OtpSender(request.Username)
-
-		// err := masterRepo.SaveToUserCredentials(userModel)
-		// if err != nil {
-		// 	fmt.Println(err)
-		// }
 
 		res := proto.RegisterResponse{RegisterResponseMap: map[string]string{
 			"Response":      "Verify OTP",
@@ -103,5 +102,51 @@ func (user *UserService) Register(request *proto.RegisterRequest) (*proto.Regist
 
 //VerifyOtp - to verify the otp
 func (user *UserService) VerifyOtp(request *proto.OtpRequest) (*proto.OtpResponse, error) {
-	return nil, nil
+	masterRepo := user.userCredentialsMasterRepoService
+
+	otpModel := models.OtpModel{}
+
+	entry, err := redis.GetRedisEntry(request.Username)
+
+	if err != nil {
+		res := proto.OtpResponse{
+			OtpResponseMap: map[string]string{
+				"Response": "Registration Failed",
+			},
+		}
+
+		return &res, err
+	}
+
+	json.Unmarshal(entry, &otpModel)
+
+	if strings.EqualFold(otpModel.Otp, request.Otp) {
+
+		redis.DeleteRedisEntry(request.Username)
+
+		err := masterRepo.SaveToUserCredentials(&otpModel.UserModel)
+
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		res := proto.OtpResponse{
+			OtpResponseMap: map[string]string{
+				"Response":      "Account Verified",
+				"Response Code": "200",
+			},
+		}
+
+		return &res, nil
+	}
+
+	res := proto.OtpResponse{
+		OtpResponseMap: map[string]string{
+			"Response":      "Try Again",
+			"Response Code": "200",
+		},
+	}
+
+	return &res, nil
+
 }
