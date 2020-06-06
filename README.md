@@ -4,6 +4,8 @@ It's an authentication application written in Go.
 Golang - Basic Login/Register services implemented using
 - gRPC
 - Database (MySQL)
+- Kafka
+- Redis
 
 ### Do Insert an application.yaml file with the structure shown in properties dir
 
@@ -25,10 +27,22 @@ Set the go path by running
 
 After installing all the dependencies
 
+Compile protos by following commands :
+
+> protoc -I=proto --go_out=plugins=grpc:proto proto/auth-messages.proto
+
+> protoc -I=proto --go_out=plugins=grpc:proto proto/auth-services.proto
+
+Run the Kafka server and Redis servers, and set the required properties in application.yaml file
+
 > go run AuthenticationApp.go
 
 It will start the grpc server at the address mentioned in your application.yaml file
 
 To run the Unit tests
 
-> go test server/GrpcServer_test.go -v
+> go test server/GrpcServer_test.go -v (TestFunction_name)
+
+### The otp generated would be visible in the logs, use in while running VerifyOtp test case.
+
+
