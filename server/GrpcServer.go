@@ -2,7 +2,6 @@ package server
 
 import (
 	"authentication/config"
-	"authentication/connections"
 	"authentication/proto"
 	"authentication/services"
 	"context"
@@ -52,7 +51,6 @@ func StartServer() {
 	}
 
 	srv := grpc.NewServer()
-	connections.InitializeDB()
 
 	proto.RegisterAuthenticationServiceServer(srv, &server{
 		userService: services.NewUserService(),

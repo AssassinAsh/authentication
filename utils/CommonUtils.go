@@ -8,8 +8,8 @@ func GetStringHash(input string) []byte {
 }
 
 //GetTimeAfterDuration - to get time after input duration
-func GetTimeAfterDuration(input time.Duration) int64 {
-	return time.Now().Add(time.Minute * input).Unix()
+func GetTimeAfterDuration(input *time.Duration) int64 {
+	return time.Now().Add(time.Minute * *input).Unix()
 }
 
 //ConvertToUTC - for converting Unix to UTC(to Time object)

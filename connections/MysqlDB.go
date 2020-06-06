@@ -37,7 +37,7 @@ func getDBConfig() *connectionDB {
 }
 
 //InitializeDB - Initializing DB
-func InitializeDB() {
+func init() {
 	getDBConfig()
 }
 

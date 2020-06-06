@@ -13,7 +13,7 @@ import (
 var RedisClient *redis.Client
 
 //Redis - function to connect to redis
-func Redis() {
+func init() {
 	fmt.Println("Initializing Redis...")
 
 	var cfg config.RedisConfig

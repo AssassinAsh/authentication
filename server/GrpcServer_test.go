@@ -54,7 +54,7 @@ func TestLogin(t *testing.T) {
 func TestRegister(t *testing.T) {
 
 	req := proto.RegisterRequest{
-		Username: "vicky",
+		Username: "test",
 		Password: "ashvin786",
 		Phone:    "9644695542",
 	}

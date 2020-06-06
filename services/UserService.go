@@ -5,7 +5,6 @@ import (
 	"authentication/proto"
 	"authentication/repo/master"
 	"authentication/repo/slave"
-	"fmt"
 	"log"
 
 	"authentication/mappers"
@@ -67,19 +66,23 @@ func (user *UserService) Login(request *proto.LoginRequest) (*proto.LoginRespons
 //Register -
 func (user *UserService) Register(request *proto.RegisterRequest) (*proto.RegisterResponse, error) {
 	log.Println("User Register Service")
-	masterRepo := user.userCredentialsMasterRepoService
+	// masterRepo := user.userCredentialsMasterRepoService
 
 	if components.CheckUsernameExistence(request.Username) {
 
 		request.Password = utils.HashAndSaltPassword(request.Password + request.Username)
 
-		err := masterRepo.SaveToUserCredentials(mappers.RegisterRequestProtoToUserModel(request))
-		if err != nil {
-			fmt.Println(err)
-		}
+		userModel := mappers.RegisterRequestProtoToUserModel(request)
+
+		err := components.CacheUser(userModel)
+
+		// err := masterRepo.SaveToUserCredentials(userModel)
+		// if err != nil {
+		// 	fmt.Println(err)
+		// }
 
 		res := proto.RegisterResponse{RegisterResponseMap: map[string]string{
-			"Response":      "Account Created Successfully",
+			"Response":      "Verify OTP",
 			"Response Code": "200",
 		}}
 
