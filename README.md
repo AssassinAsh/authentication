@@ -25,6 +25,14 @@ Set the go path by running
 
 After installing all the dependencies
 
+Compile protos by following commands :
+
+> protoc -I=proto --go_out=plugins=grpc:proto proto/auth-messages.proto
+
+> protoc -I=proto --go_out=plugins=grpc:proto proto/auth-services.proto
+
+Run the Kafka server and Redis servers, and set the required properties in application.yaml file
+
 > go run AuthenticationApp.go
 
 It will start the grpc server at the address mentioned in your application.yaml file
