@@ -1,6 +1,7 @@
 package services
 
 import (
+	"authentication/components"
 	"authentication/proto"
 	"authentication/repo/master"
 	"authentication/repo/slave"
@@ -68,7 +69,7 @@ func (user *UserService) Register(request *proto.RegisterRequest) (*proto.Regist
 	log.Println("User Register Service")
 	masterRepo := user.userCredentialsMasterRepoService
 
-	if user.checkUsernameExistence(request.Username) {
+	if components.CheckUsernameExistence(request.Username) {
 
 		request.Password = utils.HashAndSaltPassword(request.Password + request.Username)
 
@@ -92,17 +93,4 @@ func (user *UserService) Register(request *proto.RegisterRequest) (*proto.Regist
 
 	return &res, nil
 
-}
-
-func (user *UserService) checkUsernameExistence(username string) bool {
-	slaveRepo := user.userCredentialsSlaveRepoService
-
-	_, err := slaveRepo.ReadUserCredentialsByUsername(username)
-
-	if err != nil {
-		log.Println(err)
-		return true
-	}
-
-	return false
 }

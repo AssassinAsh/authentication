@@ -1,18 +1,32 @@
 package server
 
 import (
+	"authentication/config"
 	"authentication/proto"
 	"context"
+	"fmt"
 	"log"
 	"testing"
 
+	"github.com/ilyakaznacheev/cleanenv"
 	"google.golang.org/grpc"
 )
 
 var client proto.AuthenticationServiceClient
 
 func init() {
-	conn, err := grpc.Dial("localhost:6565", grpc.WithInsecure())
+
+	var cfg config.ServerConfig
+
+	err := cleanenv.ReadConfig("application.yaml", &cfg)
+
+	// target := cfg.Server.Host + ":" + cfg.Server.Port
+
+	target := "localhost:6565"
+
+	fmt.Println("Joining :", target)
+
+	conn, err := grpc.Dial(target, grpc.WithInsecure())
 	if err != nil {
 		log.Panic(err)
 	}
@@ -40,8 +54,8 @@ func TestLogin(t *testing.T) {
 func TestRegister(t *testing.T) {
 
 	req := proto.RegisterRequest{
-		Username: "Rokade",
-		Password: "abc123",
+		Username: "vicky",
+		Password: "ashvin786",
 		Phone:    "9644695542",
 	}
 

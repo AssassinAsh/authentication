@@ -1,6 +1,7 @@
 package server
 
 import (
+	"authentication/config"
 	"authentication/connections"
 	"authentication/proto"
 	"authentication/services"
@@ -8,6 +9,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/ilyakaznacheev/cleanenv"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -34,7 +36,16 @@ func (s *server) Register(ctx context.Context, request *proto.RegisterRequest) (
 
 //StartServer - function to start the authentication grpc server
 func StartServer() {
-	listner, err := net.Listen("tcp", ":6565")
+
+	var cfg config.ServerConfig
+
+	err := cleanenv.ReadConfig("application.yaml", &cfg)
+
+	if err != nil {
+		panic(err)
+	}
+
+	listner, err := net.Listen(cfg.Server.Network, ":"+cfg.Server.Port)
 
 	if err != nil {
 		log.Panic(err)
