@@ -4,6 +4,8 @@ It's an authentication application written in Go.
 Golang - Basic Login/Register services implemented using
 - gRPC
 - Database (MySQL)
+- Kafka
+- Redis
 
 ### Do Insert an application.yaml file with the structure shown in properties dir
 
@@ -39,4 +41,8 @@ It will start the grpc server at the address mentioned in your application.yaml 
 
 To run the Unit tests
 
-> go test server/GrpcServer_test.go -v
+> go test server/GrpcServer_test.go -v (TestFunction_name)
+
+### The otp generated would be visible in the logs, use in while running VerifyOtp test case.
+
+
