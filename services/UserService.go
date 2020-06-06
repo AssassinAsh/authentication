@@ -1,11 +1,16 @@
 package services
 
 import (
+	"authentication/components"
+	"authentication/models"
 	"authentication/proto"
+	"authentication/redis"
 	"authentication/repo/master"
 	"authentication/repo/slave"
+	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
 
 	"authentication/mappers"
 	"authentication/utils"
@@ -15,6 +20,7 @@ import (
 type UserServiceInterface interface {
 	Login(request *proto.LoginRequest) (*proto.LoginResponse, error)
 	Register(request *proto.RegisterRequest) (*proto.RegisterResponse, error)
+	VerifyOtp(request *proto.OtpRequest) (*proto.OtpResponse, error)
 }
 
 //UserService -
@@ -66,19 +72,19 @@ func (user *UserService) Login(request *proto.LoginRequest) (*proto.LoginRespons
 //Register -
 func (user *UserService) Register(request *proto.RegisterRequest) (*proto.RegisterResponse, error) {
 	log.Println("User Register Service")
-	masterRepo := user.userCredentialsMasterRepoService
 
-	if user.checkUsernameExistence(request.Username) {
+	if components.CheckUsernameExistence(request.Username) {
 
 		request.Password = utils.HashAndSaltPassword(request.Password + request.Username)
 
-		err := masterRepo.SaveToUserCredentials(mappers.RegisterRequestProtoToUserModel(request))
-		if err != nil {
-			fmt.Println(err)
-		}
+		userModel := mappers.RegisterRequestProtoToUserModel(request)
+
+		err := components.CacheUser(userModel)
+
+		components.OtpSender(request.Username)
 
 		res := proto.RegisterResponse{RegisterResponseMap: map[string]string{
-			"Response":      "Account Created Successfully",
+			"Response":      "Verify OTP",
 			"Response Code": "200",
 		}}
 
@@ -94,15 +100,53 @@ func (user *UserService) Register(request *proto.RegisterRequest) (*proto.Regist
 
 }
 
-func (user *UserService) checkUsernameExistence(username string) bool {
-	slaveRepo := user.userCredentialsSlaveRepoService
+//VerifyOtp - to verify the otp
+func (user *UserService) VerifyOtp(request *proto.OtpRequest) (*proto.OtpResponse, error) {
+	masterRepo := user.userCredentialsMasterRepoService
 
-	_, err := slaveRepo.ReadUserCredentialsByUsername(username)
+	otpModel := models.OtpModel{}
+
+	entry, err := redis.GetRedisEntry(request.Username)
 
 	if err != nil {
-		log.Println(err)
-		return true
+		res := proto.OtpResponse{
+			OtpResponseMap: map[string]string{
+				"Response": "Registration Failed",
+			},
+		}
+
+		return &res, err
 	}
 
-	return false
+	json.Unmarshal(entry, &otpModel)
+
+	if strings.EqualFold(otpModel.Otp, request.Otp) {
+
+		redis.DeleteRedisEntry(request.Username)
+
+		err := masterRepo.SaveToUserCredentials(&otpModel.UserModel)
+
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		res := proto.OtpResponse{
+			OtpResponseMap: map[string]string{
+				"Response":      "Account Verified",
+				"Response Code": "200",
+			},
+		}
+
+		return &res, nil
+	}
+
+	res := proto.OtpResponse{
+		OtpResponseMap: map[string]string{
+			"Response":      "Try Again",
+			"Response Code": "200",
+		},
+	}
+
+	return &res, nil
+
 }

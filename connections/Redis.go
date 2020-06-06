@@ -9,11 +9,11 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
-//Client - redis client
-var Client *redis.Client
+//RedisClient - redis client
+var RedisClient *redis.Client
 
 //Redis - function to connect to redis
-func Redis() {
+func init() {
 	fmt.Println("Initializing Redis...")
 
 	var cfg config.RedisConfig
@@ -29,11 +29,12 @@ func Redis() {
 	if len(dsn) == 0 {
 		dsn = cfg.RedisConfig.Address + ":" + cfg.RedisConfig.Port
 	}
-	Client = redis.NewClient(&redis.Options{
+	RedisClient = redis.NewClient(&redis.Options{
 		Addr: dsn,
 	})
-	_, err = Client.Ping().Result()
+	_, err = RedisClient.Ping().Result()
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("Redis Connected")
 }

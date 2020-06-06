@@ -1,7 +1,10 @@
 package consumers
 
 import (
+	"authentication/components"
 	"authentication/config"
+	"authentication/models"
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/signal"
@@ -12,6 +15,8 @@ import (
 
 //OtpConsumer -
 func OtpConsumer() {
+
+	fmt.Println("Otp Consumer Running...")
 
 	var cfg config.KafkaConfig
 
@@ -59,6 +64,7 @@ func OtpConsumer() {
 			case msg := <-consumer.Messages():
 				msgCount++
 				fmt.Println("Received messages", string(msg.Key), string(msg.Value))
+				otpProcessor(&msg.Value)
 			case <-signals:
 				fmt.Println("Interrupt is detected")
 				doneCh <- struct{}{}
@@ -68,4 +74,12 @@ func OtpConsumer() {
 
 	<-doneCh
 	fmt.Println("Processed", msgCount, "messages")
+}
+
+func otpProcessor(otp *[]byte) {
+	otpKafka := models.OtpKafka{}
+
+	json.Unmarshal(*otp, &otpKafka)
+
+	components.UpdateOtp(&otpKafka)
 }

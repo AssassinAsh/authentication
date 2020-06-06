@@ -20,3 +20,12 @@ message LoginResponse {
 message RegisterResponse {
     map<string, string> registerResponseMap = 1;
 }
+
+message OtpRequest {
+    string otp = 1;
+    string username = 2;
+}
+
+message OtpResponse {
+    map<string, string> otpResponseMap = 1;
+}

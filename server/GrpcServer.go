@@ -1,13 +1,15 @@
 package server
 
 import (
-	"authentication/connections"
+	"authentication/config"
 	"authentication/proto"
 	"authentication/services"
 	"context"
+	"fmt"
 	"log"
 	"net"
 
+	"github.com/ilyakaznacheev/cleanenv"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -32,16 +34,34 @@ func (s *server) Register(ctx context.Context, request *proto.RegisterRequest) (
 	return res, nil
 }
 
+func (s *server) VerifyOtp(ctx context.Context, request *proto.OtpRequest) (*proto.OtpResponse, error) {
+	res, err := s.userService.VerifyOtp(request)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 //StartServer - function to start the authentication grpc server
 func StartServer() {
-	listner, err := net.Listen("tcp", ":6565")
+
+	fmt.Println("Starting gRPC Server")
+
+	var cfg config.ServerConfig
+
+	err := cleanenv.ReadConfig("application.yaml", &cfg)
+
+	if err != nil {
+		panic(err)
+	}
+
+	listner, err := net.Listen(cfg.Server.Network, ":"+cfg.Server.Port)
 
 	if err != nil {
 		log.Panic(err)
 	}
 
 	srv := grpc.NewServer()
-	connections.InitializeDB()
 
 	proto.RegisterAuthenticationServiceServer(srv, &server{
 		userService: services.NewUserService(),

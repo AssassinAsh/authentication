@@ -13,3 +13,11 @@ func RegisterRequestProtoToUserModel(request *proto.RegisterRequest) *models.Use
 		Phone:    request.Phone,
 	}
 }
+
+//UserToOtpModel -
+func UserToOtpModel(user *models.User) *models.OtpModel {
+	return &models.OtpModel{
+		UserModel: *user,
+		Otp:       "",
+	}
+}

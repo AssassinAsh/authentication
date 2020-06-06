@@ -1,14 +1,11 @@
 package main
 
 import (
-	"authentication/kafka/producers"
-	"authentication/utils"
+	"authentication/connections"
+	"authentication/models"
+	"encoding/json"
 	"fmt"
 )
-
-type otp struct {
-	Otp string
-}
 
 func main() {
 	// // conn, err := grpc.Dial("localhost:6565", grpc.WithInsecure())
@@ -17,14 +14,25 @@ func main() {
 	// }
 	// client := proto.NewAuthenticationServiceClient(conn)
 
-	test := otp{
-		Otp: *utils.OtpGenerator(),
+	// test := otp{
+	// 	Otp: *utils.OtpGenerator(),
+	// }
+
+	// fmt.Println("test :", test.Otp)
+
+	// producers.OtpProducer(&test)
+
+	// // conn.Close()
+
+	value := models.OtpModel{}
+
+	entry, err := connections.RedisClient.Get("test").Bytes()
+
+	if err != nil {
+		panic(err)
 	}
 
-	fmt.Println("test :", test.Otp)
+	json.Unmarshal(entry, &value)
 
-	producers.OtpProducer(&test)
-
-	// conn.Close()
-
+	fmt.Println(value.UserModel.Password)
 }
