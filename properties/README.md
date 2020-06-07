@@ -1,7 +1,7 @@
 - server:
   - host: hostName (localhost)
   - port: port (8080)
-
+  - network: tcp
 - database:
   - port: dbPort
   - user: dbUsername
