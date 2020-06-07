@@ -19,7 +19,7 @@ Golang - Basic Login/Register services implemented using
 >            `created_at` timestamp NOT NULL DEFAULT current_timestamp,
 >            `updated_at` timestamp NOT NULL DEFAULT current_timestamp,
 >            `deleted_at` varchar(45) NULL default '0000-00-00 00:00:00',
->             PRIMARY KEY (username, id)); 
+>             PRIMARY KEY (id, username)); 
 
 Set the go path by running
 
