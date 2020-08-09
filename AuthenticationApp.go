@@ -3,7 +3,7 @@ package main
 import (
 	"authentication/config"
 	"authentication/controller"
-	"authentication/kafka/consumers"
+// 	"authentication/kafka/consumers"
 	"authentication/server"
 	"fmt"
 	"log"
@@ -25,7 +25,7 @@ func main() {
 
 	log.Println("Running...")
 	http.HandleFunc("/status", controller.HealthCheckController)
-	go consumers.OtpConsumer()
+// 	go consumers.OtpConsumer()
 	server.StartServer()
 	fmt.Println(http.ListenAndServe(":"+cfg.Server.Port, nil))
 	fmt.Println("Started Authentication Server on Port :", cfg.Server.Port)

@@ -7,11 +7,12 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net"
+	"strconv"
+	"net/http"
+	"github.com/improbable-eng/grpc-web/go/grpcweb"
 
 	"github.com/ilyakaznacheev/cleanenv"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 )
 
 type server struct {
@@ -55,7 +56,7 @@ func StartServer() {
 		panic(err)
 	}
 
-	listner, err := net.Listen(cfg.Server.Network, ":"+cfg.Server.Port)
+// 	listner, err := net.Listen(cfg.Server.Network, ":"+cfg.Server.Port)
 
 	if err != nil {
 		log.Panic(err)
@@ -63,13 +64,54 @@ func StartServer() {
 
 	srv := grpc.NewServer()
 
-	proto.RegisterAuthenticationServiceServer(srv, &server{
+    proto.RegisterAuthenticationServiceServer(srv, &server{
 		userService: services.NewUserService(),
 	})
 
-	reflection.Register(srv)
+//     wrappedServer := grpcweb.WrapServer(srv)
 
-	if e := srv.Serve(listner); e != nil {
-		log.Print(e)
+    wrappedGrpc := grpcweb.WrapServer(srv, grpcweb.WithAllowedRequestHeaders([]string{"*"}), grpcweb.WithWebsockets(false))
+
+
+// 	handler := func(resp http.ResponseWriter, req *http.Request) {
+// 		wrappedServer.ServeHTTP(resp, req)
+// 	}
+
+    handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+    		w.Header().Set("Access-Control-Allow-Origin", "*")
+    		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+    		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, x-user-agent, x-grpc-web, grpc-status, grpc-message")
+    		w.Header().Set("Access-Control-Expose-Headers", "grpc-status, grpc-message")
+    		if r.Method == "OPTIONS" {
+    			return
+    		}
+
+    		if wrappedGrpc.IsGrpcWebRequest(r) {
+    			wrappedGrpc.ServeHTTP(w, r)
+    		} else {
+    			// Fall back to other servers.
+    			http.DefaultServeMux.ServeHTTP(w, r)
+    		}
+    	})
+
+	port, _ := strconv.Atoi(cfg.Server.Port)
+
+
+	httpServer := http.Server{
+		Addr:    fmt.Sprintf(":%d", port),
+		Handler: http.HandlerFunc(handler),
 	}
+
+
+	fmt.Printf("Starting server. http port: %d", port)
+
+	if err := httpServer.ListenAndServe(); err != nil {
+			fmt.Sprintf("failed starting http server: %v", err)
+	}
+//
+// 	reflection.Register(srv)
+//
+// 	if e := srv.Serve(listner); e != nil {
+// 		log.Print(e)
+// 	}
 }
