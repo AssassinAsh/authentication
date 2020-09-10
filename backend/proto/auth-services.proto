@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package proto;
+
+import "auth-messages.proto";
+
+service AuthenticationService {
+    rpc Login (LoginRequest) returns (LoginResponse);
+    rpc Register (RegisterRequest) returns (RegisterResponse);
+    rpc VerifyOtp (OtpRequest) returns (OtpResponse);
+}
