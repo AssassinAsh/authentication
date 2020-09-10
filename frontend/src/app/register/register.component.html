@@ -1,0 +1,11 @@
+<div class="register">
+    <h2>Register</h2>
+    <input [(ngModel)] = "username" class="username" placeholder="Username"
+        type="text"/>
+    <input [(ngModel)] = "password" class="password" placeholder="Password"
+        type="password"/>
+    <input [(ngModel)] = "otp" class="otp" placeholder="OTP" 
+        maxlength="4" type="tel"/>
+    <input (click)="registerUser()" type="button" value="Register"/>
+</div>
+

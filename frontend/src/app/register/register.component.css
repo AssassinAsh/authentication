@@ -1,0 +1,61 @@
+.register {
+    width: 300px;
+    padding:  40px;
+    position: absolute;
+    margin-top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #191919;  
+    text-align: center;
+    border-radius: 2px;
+}
+
+.register h2{
+    color: white;
+    text-transform: uppercase;
+    font-weight: 500;
+
+}
+ 
+.register input[type = "text"], 
+.register input[type = "password"], 
+.register input[type = "tel"] {
+    border:0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #3498db;
+    padding: 14px 10px;
+    width: 200px;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25s;
+}
+
+.register input[type = "text"]:focus, 
+.register input[type = "password"]:focus, 
+.register input[type = "tel"]:focus {
+    width: 280px;
+    border-color: #2ecc71;
+}
+
+.register input[type="button"] {
+    border:0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #2ecc71;
+    padding: 14px 40px;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25s;
+    cursor: pointer;
+}
+
+.register input[type="button"]:hover {
+    background: #2ecc71;
+}
