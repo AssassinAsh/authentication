@@ -12,7 +12,7 @@ export class GrpcService {
   client : AuthenticationServiceClient;
 
   constructor() {
-    this.client = new AuthenticationServiceClient('http://localhost:6565');
+    this.client = new AuthenticationServiceClient('http://localhost:8080');
   }
 
   login(req: LoginRequest) : grpcWeb.ClientReadableStream<LoginResponse> {

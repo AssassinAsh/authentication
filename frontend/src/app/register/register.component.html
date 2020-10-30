@@ -4,8 +4,8 @@
         type="text"/>
     <input [(ngModel)] = "password" class="password" placeholder="Password"
         type="password"/>
-    <input [(ngModel)] = "otp" class="otp" placeholder="OTP" 
+    <input *ngIf="otpFlag" [(ngModel)] = "otp" class="otp" placeholder="OTP" 
         maxlength="4" type="tel"/>
-    <input (click)="registerUser()" type="button" value="Register"/>
+    <input (click)="action()" type="button" value="{{buttonName}}"/>
 </div>
 
