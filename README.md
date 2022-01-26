@@ -1,4 +1,4 @@
-# authentication
+# EasyAuth
 It's an authentication application written in Go.
 
 Golang - Basic Login/Register services implemented using
